@@ -1,7 +1,7 @@
 import sys
 from collections.abc import AsyncGenerator
 from typing import _GenericAlias  # type: ignore
-from typing import Any, Callable, ClassVar, Generic, Tuple, Type, TypeVar, Union
+from typing import ClassVar, Generic, Type, TypeVar, Union
 
 
 def is_list(annotation: object) -> bool:
@@ -104,16 +104,3 @@ def get_parameters(annotation: Type):
         return annotation.__parameters__
     else:
         return ()  # pragma: no cover
-
-
-_T = TypeVar("_T")
-
-
-def __dataclass_transform__(
-    *,
-    eq_default: bool = True,
-    order_default: bool = False,
-    kw_only_default: bool = False,
-    field_descriptors: Tuple[Union[type, Callable[..., Any]], ...] = (()),
-) -> Callable[[_T], _T]:
-    return lambda a: a

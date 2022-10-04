@@ -15,6 +15,8 @@ from typing import (
     overload,
 )
 
+from typing_extensions import dataclass_transform
+
 from .exceptions import (
     MissingFieldAnnotationError,
     MissingReturnAnnotationError,
@@ -25,7 +27,6 @@ from .types.type_resolver import _get_fields
 from .types.types import TypeDefinition
 from .utils.dataclasses import add_custom_init_fn
 from .utils.str_converters import to_camel_case
-from .utils.typing import __dataclass_transform__
 
 
 def _get_interfaces(cls: Type) -> List[TypeDefinition]:
@@ -175,8 +176,8 @@ T = TypeVar("T", bound=Type)
 
 
 @overload
-@__dataclass_transform__(
-    order_default=True, kw_only_default=True, field_descriptors=(field, StrawberryField)
+@dataclass_transform(
+    order_default=True, kw_only_default=True, field_specifiers=(field, StrawberryField)
 )
 def type(
     cls: T,
@@ -192,8 +193,8 @@ def type(
 
 
 @overload
-@__dataclass_transform__(
-    order_default=True, kw_only_default=True, field_descriptors=(field, StrawberryField)
+@dataclass_transform(
+    order_default=True, kw_only_default=True, field_specifiers=(field, StrawberryField)
 )
 def type(
     *,
@@ -254,8 +255,8 @@ def type(
 
 
 @overload
-@__dataclass_transform__(
-    order_default=True, kw_only_default=True, field_descriptors=(field, StrawberryField)
+@dataclass_transform(
+    order_default=True, kw_only_default=True, field_specifiers=(field, StrawberryField)
 )
 def input(
     cls: T,
@@ -268,8 +269,8 @@ def input(
 
 
 @overload
-@__dataclass_transform__(
-    order_default=True, kw_only_default=True, field_descriptors=(field, StrawberryField)
+@dataclass_transform(
+    order_default=True, kw_only_default=True, field_specifiers=(field, StrawberryField)
 )
 def input(
     *,
@@ -304,8 +305,8 @@ def input(
 
 
 @overload
-@__dataclass_transform__(
-    order_default=True, kw_only_default=True, field_descriptors=(field, StrawberryField)
+@dataclass_transform(
+    order_default=True, kw_only_default=True, field_specifiers=(field, StrawberryField)
 )
 def interface(
     cls: T,
@@ -318,8 +319,8 @@ def interface(
 
 
 @overload
-@__dataclass_transform__(
-    order_default=True, kw_only_default=True, field_descriptors=(field, StrawberryField)
+@dataclass_transform(
+    order_default=True, kw_only_default=True, field_specifiers=(field, StrawberryField)
 )
 def interface(
     *,
@@ -330,8 +331,8 @@ def interface(
     ...
 
 
-@__dataclass_transform__(
-    order_default=True, kw_only_default=True, field_descriptors=(field, StrawberryField)
+@dataclass_transform(
+    order_default=True, kw_only_default=True, field_specifiers=(field, StrawberryField)
 )
 def interface(
     cls: Optional[T] = None,
