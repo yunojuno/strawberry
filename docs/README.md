@@ -9,6 +9,7 @@
 - [Mutations](./general/mutations.md)
 - [Subscriptions](./general/subscriptions.md)
 - [Why](./general/why.md)
+- [FAQ](./general/faq.md)
 
 ## Types
 
