@@ -4,7 +4,7 @@ import typing
 from datetime import datetime
 from inspect import isawaitable
 
-from strawberry.extensions import Extension
+from strawberry.extensions import SchemaExtension
 from strawberry.extensions.utils import get_path_from_info
 from strawberry.types.execution import ExecutionContext
 
@@ -73,7 +73,7 @@ class ApolloTracingStats:
         }
 
 
-class ApolloTracingExtension(Extension):
+class ApolloTracingExtension(SchemaExtension):
     def __init__(self, execution_context: ExecutionContext):
         self._resolver_stats: typing.List[ApolloResolverStats] = []
         self.execution_context = execution_context

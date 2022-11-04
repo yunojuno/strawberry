@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Dict, List, Optional
 from unittest.mock import patch
 
 import pytest
@@ -11,7 +11,7 @@ from graphql import (
 )
 
 import strawberry
-from strawberry.extensions import Extension
+from strawberry.extensions import SchemaExtension
 
 
 def test_base_extension():
@@ -25,7 +25,7 @@ def test_base_extension():
         def person(self) -> Person:
             return Person()
 
-    schema = strawberry.Schema(query=Query, extensions=[Extension])
+    schema = strawberry.Schema(query=Query, extensions=[SchemaExtension])
 
     query = """
         query {
@@ -43,7 +43,7 @@ def test_base_extension():
 
 
 def test_extension():
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         def get_results(self):
             return {"example": "example"}
 
@@ -78,7 +78,7 @@ def test_extension():
 
 @pytest.mark.asyncio
 async def test_extension_async():
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         def get_results(self):
             return {"example": "example"}
 
@@ -114,9 +114,10 @@ async def test_extension_async():
 def test_extension_access_to_parsed_document():
     query_name = ""
 
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         def on_parsing_end(self):
             nonlocal query_name
+            assert self.execution_context.graphql_document
             query_definition = self.execution_context.graphql_document.definitions[0]
             query_name = query_definition.name.value
 
@@ -147,9 +148,9 @@ def test_extension_access_to_parsed_document():
 
 
 def test_extension_access_to_errors():
-    execution_errors = []
+    execution_errors: Optional[List[GraphQLError]] = []
 
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         def on_request_end(self):
             nonlocal execution_errors
             execution_errors = self.execution_context.errors
@@ -176,6 +177,7 @@ def test_extension_access_to_errors():
 
     result = schema.execute_sync(query)
 
+    assert result.errors
     assert len(result.errors) == 1
     assert execution_errors == result.errors
 
@@ -183,7 +185,7 @@ def test_extension_access_to_errors():
 def test_extension_access_to_root_value():
     root_value = None
 
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         def on_request_end(self):
             nonlocal root_value
             root_value = self.execution_context.root_value
@@ -208,7 +210,7 @@ def test_extension_access_to_root_value():
 async def test_async_extension_hooks():
     called_hooks = set()
 
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         async def on_request_start(self):
             called_hooks.add(1)
 
@@ -258,7 +260,7 @@ async def test_async_extension_hooks():
 async def test_mixed_sync_and_async_extension_hooks():
     called_hooks = set()
 
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         def on_request_start(self):
             called_hooks.add(1)
 
@@ -285,7 +287,7 @@ async def test_mixed_sync_and_async_extension_hooks():
 
 
 def test_warning_about_async_get_results_hooks_in_sync_context():
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         async def get_results(self):
             pass
 
@@ -306,7 +308,7 @@ def test_warning_about_async_get_results_hooks_in_sync_context():
 
 @pytest.mark.asyncio
 async def test_dont_swallow_errors_in_parsing_hooks():
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         def on_parsing_start(self):
             raise Exception("This shouldn't be swallowed")
 
@@ -327,9 +329,9 @@ async def test_dont_swallow_errors_in_parsing_hooks():
 
 
 def test_on_parsing_end_called_when_errors():
-    execution_errors = False
+    execution_errors = None
 
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         def on_parsing_end(self):
             nonlocal execution_errors
             execution_context = self.execution_context
@@ -351,7 +353,7 @@ def test_on_parsing_end_called_when_errors():
 
 
 def test_extension_override_execution():
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         def on_executing_start(self):
             # Always return a static response
             self.execution_context.result = GraphQLExecutionResult(
@@ -385,7 +387,7 @@ def test_extension_override_execution():
 
 @pytest.mark.asyncio
 async def test_extension_override_execution_async():
-    class MyExtension(Extension):
+    class MyExtension(SchemaExtension):
         def on_executing_start(self):
             # Always return a static response
             self.execution_context.result = GraphQLExecutionResult(
@@ -422,9 +424,9 @@ def test_execution_cache_example(mock_original_execute):
     # Test that the example of how to use the on_executing_start hook in the
     # docs actually works
 
-    response_cache = {}
+    response_cache: Dict[str, Optional[GraphQLExecutionResult]] = {}
 
-    class ExecutionCache(Extension):
+    class ExecutionCache(SchemaExtension):
         def on_executing_start(self):
             # Check if we've come across this query before
             execution_context = self.execution_context
@@ -496,7 +498,7 @@ def test_execution_reject_example(mock_original_execute):
     # Test that the example of how to use the on_executing_start hook in the
     # docs actually works
 
-    class RejectSomeQueries(Extension):
+    class RejectSomeQueries(SchemaExtension):
         def on_executing_start(self):
             # Reject all operations called "RejectMe"
             execution_context = self.execution_context

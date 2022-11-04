@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import List
 
-from strawberry.extensions import Extension
+from strawberry.extensions import SchemaExtension
 from strawberry.utils.await_maybe import await_maybe
 
 
@@ -9,7 +9,7 @@ class ExtensionContextManager(ABC):
     enter_method: str
     exit_method: str
 
-    def __init__(self, extensions: List[Extension]):
+    def __init__(self, extensions: List[SchemaExtension]):
         self.extensions = extensions
 
 

@@ -17,7 +17,7 @@ from graphql.type.definition import GraphQLArgument
 
 from strawberry.custom_scalar import ScalarDefinition, ScalarWrapper
 from strawberry.enum import EnumDefinition
-from strawberry.extensions import Extension
+from strawberry.extensions import SchemaExtension
 from strawberry.schema.types.concrete_type import TypeMap
 from strawberry.types.types import TypeDefinition
 from strawberry.union import StrawberryUnion
@@ -38,7 +38,7 @@ class Schema(BaseSchema):
         # TODO: we should update directives' type in the main schema
         directives: Iterable[Type] = (),
         types: Iterable[Type] = (),
-        extensions: Iterable[Union[Type[Extension], Extension]] = (),
+        extensions: Iterable[Union[Type[SchemaExtension], SchemaExtension]] = (),
         execution_context_class: Optional[Type[GraphQLExecutionContext]] = None,
         config: Optional[StrawberryConfig] = None,
         scalar_overrides: Optional[

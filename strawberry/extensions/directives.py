@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, Tuple
 from graphql import DirectiveNode, GraphQLResolveInfo
 
 from strawberry.directive import StrawberryDirective
-from strawberry.extensions import Extension
+from strawberry.extensions import SchemaExtension
 from strawberry.field import StrawberryField
 from strawberry.types import Info
 from strawberry.utils.await_maybe import AwaitableOrValue, await_maybe
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 SPECIFIED_DIRECTIVES = {"include", "skip"}
 
 
-class DirectivesExtension(Extension):
+class DirectivesExtension(SchemaExtension):
     async def resolve(
         self, _next, root, info: GraphQLResolveInfo, *args, **kwargs
     ) -> AwaitableOrValue[Any]:
@@ -31,7 +31,7 @@ class DirectivesExtension(Extension):
         return value
 
 
-class DirectivesExtensionSync(Extension):
+class DirectivesExtensionSync(SchemaExtension):
     def resolve(
         self, _next, root, info: GraphQLResolveInfo, *args, **kwargs
     ) -> AwaitableOrValue[Any]:

@@ -2,10 +2,10 @@ from typing import List, Type
 
 from graphql import ASTValidationRule
 
-from strawberry.extensions.base_extension import Extension
+from strawberry.extensions.base_extension import SchemaExtension
 
 
-class AddValidationRules(Extension):
+class AddValidationRules(SchemaExtension):
     """
     Add graphql-core validation rules
 

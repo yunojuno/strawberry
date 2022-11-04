@@ -1,11 +1,11 @@
 import typing
 
 import strawberry
-from strawberry.extensions import Extension
+from strawberry.extensions import SchemaExtension
 from strawberry.file_uploads import Upload
 
 
-class MyExtension(Extension):
+class MyExtension(SchemaExtension):
     def get_results(self):
         return {"example": "example"}
 

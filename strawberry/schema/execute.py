@@ -24,8 +24,8 @@ from graphql import (
 from graphql.language import DocumentNode
 from graphql.validation import ASTValidationRule, validate
 
-from strawberry.extensions import Extension
-from strawberry.extensions.runner import ExtensionsRunner
+from strawberry.extensions import SchemaExtension
+from strawberry.extensions.runner import SchemaExtensionsRunner
 from strawberry.types import ExecutionContext, ExecutionResult
 from strawberry.types.graphql import OperationType
 
@@ -65,12 +65,12 @@ async def execute(
     query: str,
     *,
     allowed_operation_types: Iterable[OperationType],
-    extensions: Sequence[Union[Type[Extension], Extension]],
+    extensions: Sequence[Union[Type[SchemaExtension], SchemaExtension]],
     execution_context: ExecutionContext,
     execution_context_class: Optional[Type[GraphQLExecutionContext]] = None,
     process_errors: Callable[[List[GraphQLError], Optional[ExecutionContext]], None],
 ) -> ExecutionResult:
-    extensions_runner = ExtensionsRunner(
+    extensions_runner = SchemaExtensionsRunner(
         execution_context=execution_context,
         extensions=list(extensions),
     )
@@ -151,12 +151,12 @@ def execute_sync(
     query: str,
     *,
     allowed_operation_types: Iterable[OperationType],
-    extensions: Sequence[Union[Type[Extension], Extension]],
+    extensions: Sequence[Union[Type[SchemaExtension], SchemaExtension]],
     execution_context: ExecutionContext,
     execution_context_class: Optional[Type[GraphQLExecutionContext]] = None,
     process_errors: Callable[[List[GraphQLError], Optional[ExecutionContext]], None],
 ) -> ExecutionResult:
-    extensions_runner = ExtensionsRunner(
+    extensions_runner = SchemaExtensionsRunner(
         execution_context=execution_context,
         extensions=list(extensions),
     )

@@ -6,7 +6,7 @@ from strawberry.types import ExecutionContext
 from strawberry.utils.await_maybe import AwaitableOrValue
 
 
-class Extension:
+class SchemaExtension:
     execution_context: ExecutionContext
 
     def __init__(self, *, execution_context: ExecutionContext):

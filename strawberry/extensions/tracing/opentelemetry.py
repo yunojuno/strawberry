@@ -8,7 +8,7 @@ from opentelemetry.trace import Span, SpanKind, Tracer
 
 from graphql import GraphQLResolveInfo
 
-from strawberry.extensions import Extension
+from strawberry.extensions import SchemaExtension
 from strawberry.extensions.utils import get_path_from_info
 from strawberry.types.execution import ExecutionContext
 
@@ -26,7 +26,7 @@ class RequestStage(enum.Enum):
     VALIDATION = enum.auto()
 
 
-class OpenTelemetryExtension(Extension):
+class OpenTelemetryExtension(SchemaExtension):
     _arg_filter: Optional[ArgFilter]
     _span_holder: Dict[RequestStage, Span] = dict()
     _tracer: Tracer
