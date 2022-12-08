@@ -99,11 +99,11 @@ def _process_scalar(
     _source_file = None
     _source_line = None
 
-    # if should_use_rich_exceptions():
-    #     frame = getframeinfo(stack()[3][0])
+    if should_use_rich_exceptions():
+        frame = getframeinfo(stack()[3][0])
 
-    #     _source_file = frame.filename
-    #     _source_line = frame.lineno
+        _source_file = frame.filename
+        _source_line = frame.lineno
 
     wrapper = ScalarWrapper(cls)
     wrapper._scalar_definition = ScalarDefinition(
